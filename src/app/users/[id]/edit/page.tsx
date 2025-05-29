@@ -8,10 +8,6 @@ export default function EditUserPage() {
   const router = useRouter();
   const params = useParams();
   const token = getAuthToken();
-  
-  if (!token) {
-  throw new Error('No auth token found');
-  }
 
   const userId = params.id;
 
@@ -23,6 +19,10 @@ export default function EditUserPage() {
   });
 
   useEffect(() => {
+      if (!token) {
+        alert('Not Authenticated, please login first')
+        window.location.href = '/';            
+      }
 
     // Fetch existing user data
     const fetchUser = async () => {

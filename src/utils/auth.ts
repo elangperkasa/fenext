@@ -34,8 +34,9 @@ export async function fetchWithAuth(
     return response.json();
 }
 
-export function clearAuthToken() {
+export function logout() {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
+        window.location.href = '/';
     }
 }

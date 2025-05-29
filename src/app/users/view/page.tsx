@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAuthToken } from '@/utils/auth';
+import { getAuthToken,logout } from '@/utils/auth';
 
 interface User {
   id: string;
@@ -18,11 +18,15 @@ export default function HomePage() {
   const router = useRouter();
   const token = getAuthToken();
   
-  if (!token) {
-  throw new Error('No auth token found');
-  }
 
   useEffect(() => {
+     if (!token) {
+          // throw new Error('No auth token found');
+          // router.push('/');  
+          alert('Not Authenticated, please login first')
+          window.location.href = '/';
+            
+      }
 
     const fetchUsers = async () => {
       try {
@@ -71,11 +75,19 @@ export default function HomePage() {
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-4">User List</h1>
-      <Link href="/users/new">
-          <button className="cursor-pointer bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-            + Add New
-          </button>
-        </Link>
+      <div className="flex gap-4 mt-4">
+          <Link href="/users/new">
+              <button className="cursor-pointer bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                + Add New
+              </button>          
+            </Link>
+            <button
+                onClick={() => logout()}
+                className="cursor-pointer px-4 py-2 bg-red-500 text-white rounded"
+            >
+                Logout
+            </button>
+        </div>
        <div className="px-4 py-2"></div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">

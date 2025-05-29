@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuthToken } from '@/utils/auth';
 
@@ -28,6 +28,7 @@ export default function NewUserPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+
     try {
           
         const response = await fetch('https://localhost:7267/api/User/', {
@@ -49,6 +50,13 @@ export default function NewUserPage() {
       alert(`Error: ${err}`);
     }
   };
+
+    useEffect(() => {
+       if (!token) {
+            alert('Not Authenticated, please login first')
+            window.location.href = '/';              
+        }
+      })
 
   return (
     <div className="p-6">
