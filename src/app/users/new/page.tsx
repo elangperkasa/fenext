@@ -19,6 +19,10 @@ export default function NewUserPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+   const handleCancel = () => {
+    router.push('/');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -90,12 +94,21 @@ export default function NewUserPage() {
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Submit
+        <div className="flex gap-4 mt-4">
+          <button
+            type="submit"
+            className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Submit
+          </button>
+          <button
+              type="button"
+              onClick={handleCancel}
+              className="cursor-pointer bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+          >
+              Cancel
         </button>
+        </div>
       </form>
     </div>
   );
