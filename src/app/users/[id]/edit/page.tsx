@@ -2,10 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth';
 
 export default function EditUserPage() {
   const router = useRouter();
   const params = useParams();
+  const token = getAuthToken();
+  
+  if (!token) {
+  throw new Error('No auth token found');
+  }
+
   const userId = params.id;
 
   const [formData, setFormData] = useState({
@@ -16,12 +23,6 @@ export default function EditUserPage() {
   });
 
   useEffect(() => {
-     const token = localStorage.getItem('token');
-      if (token) {
-          console.log('Token:', token);
-      } else {
-          console.log('No token found');
-      }
 
     // Fetch existing user data
     const fetchUser = async () => {
@@ -53,12 +54,7 @@ export default function EditUserPage() {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-          console.log('Token:', token);
-      } else {
-          console.log('No token found');
-      }
+
       const response = await fetch(`https://localhost:7267/api/user/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json',

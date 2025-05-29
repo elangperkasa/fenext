@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-// import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth';
 
 interface User {
   id: string;
@@ -16,14 +16,13 @@ interface User {
 export default function HomePage() {
   const [users, setUsers] = useState<User[]>([]);
   const router = useRouter();
+  const token = getAuthToken();
+  
+  if (!token) {
+  throw new Error('No auth token found');
+  }
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        console.log('Token:', token);
-    } else {
-        console.log('No token found');
-    }
 
     const fetchUsers = async () => {
       try {
@@ -49,12 +48,7 @@ export default function HomePage() {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-          console.log('Token:', token);
-      } else {
-          console.log('No token found');
-      }
+
       const res = await fetch(`https://localhost:7267/api/user/${id}`, {
         method: 'DELETE',
          headers: { 'Content-Type': 'application/json',

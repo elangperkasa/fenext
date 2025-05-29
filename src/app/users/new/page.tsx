@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth';
 
 export default function NewUserPage() {
   const router = useRouter();
+  const token = getAuthToken();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -27,12 +29,6 @@ export default function NewUserPage() {
     e.preventDefault();
 
     try {
-          const token = localStorage.getItem('token');
-          if (token) {
-              console.log('Token:', token);
-          } else {
-              console.log('No token found');
-          }
           
         const response = await fetch('https://localhost:7267/api/User/', {
           method: 'POST',
