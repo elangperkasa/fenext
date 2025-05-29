@@ -20,23 +20,31 @@ export default function NewUserPage() {
   };
 
    const handleCancel = () => {
-    router.push('/');
+    router.push('/users/view');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:7267/api/User/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+          const token = localStorage.getItem('token');
+          if (token) {
+              console.log('Token:', token);
+          } else {
+              console.log('No token found');
+          }
+          
+        const response = await fetch('https://localhost:7267/api/User/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`},
+          body: JSON.stringify(formData),
+        });
 
 
       if (response.ok) {
         alert('User created successfully!');
-        router.push('/'); // navigate back to list
+        router.push('/users/view'); // navigate back to list
       } else {
         const error = await response.text();
         alert(`Failed to create user: ${error}`);

@@ -16,9 +16,22 @@ export default function EditUserPage() {
   });
 
   useEffect(() => {
+     const token = localStorage.getItem('token');
+      if (token) {
+          console.log('Token:', token);
+      } else {
+          console.log('No token found');
+      }
+
     // Fetch existing user data
     const fetchUser = async () => {
-      const res = await fetch(`https://localhost:7267/api/user/${userId}`);
+      const res = await fetch(`https://localhost:7267/api/user/${userId}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`}
+      });
+
       const data = await res.json();
       setFormData({
         name: data.name,
@@ -40,15 +53,23 @@ export default function EditUserPage() {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem('token');
+      if (token) {
+          console.log('Token:', token);
+      } else {
+          console.log('No token found');
+      }
       const response = await fetch(`https://localhost:7267/api/user/${userId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         alert('User updated successfully!');
-        router.push('/'); // Go back to list
+        router.push('/users/view'); // Go back to list
       } else {
         const error = await response.text();
         alert(`Failed to update user: ${error}`);
@@ -60,7 +81,7 @@ export default function EditUserPage() {
   };
 
   const handleCancel = () => {
-    router.push('/');
+    router.push('/users/view');
   };
 
   return (
